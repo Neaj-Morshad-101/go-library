@@ -1,10 +1,11 @@
-package go_library
+package main
 
 import (
 	"fmt"
-	"github.com/Neaj-Morshad-101/go-library/pkg/watch"
 	"math/rand"
 	"time"
+
+	"github.com/Neaj-Morshad-101/go-library/pkg/watch"
 )
 
 //package main
