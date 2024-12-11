@@ -18,7 +18,7 @@ func Watch(v interface{}) {
 	timestamp := time.Now().Format("15:04:05.000")
 
 	// Get caller information
-	pc, file, line, ok := runtime.Caller(1)
+	pc, fullFilePath, line, ok := runtime.Caller(1)
 	if !ok {
 		fmt.Println("Unable to get caller information")
 		return
@@ -36,14 +36,14 @@ func Watch(v interface{}) {
 		}
 	}
 
-	// Get filename
-	shortFile := file
-	if lastSlashIndex := strings.LastIndexByte(file, '/'); lastSlashIndex != -1 {
-		shortFile = file[lastSlashIndex+1:]
+	// Get filename for display only
+	shortFile := fullFilePath
+	if lastSlashIndex := strings.LastIndexByte(fullFilePath, '/'); lastSlashIndex != -1 {
+		shortFile = fullFilePath[lastSlashIndex+1:]
 	}
 
 	// Get variable name
-	varName := extractVariableName(file, line)
+	varName := extractVariableName(fullFilePath, line)
 
 	// Format the output with colors
 	timestampStr := colorize("["+timestamp+"]", colorBlue)
@@ -109,9 +109,9 @@ func Watch(v interface{}) {
 }
 
 // extractVariableName attempts to extract the variable name from the source code
-func extractVariableName(file string, line int) string {
+func extractVariableName(fullFilePath string, line int) string {
 	// Read the source file
-	content, err := ioutil.ReadFile(file)
+	content, err := ioutil.ReadFile(fullFilePath)
 	if err != nil {
 		return "<unknown>"
 	}
